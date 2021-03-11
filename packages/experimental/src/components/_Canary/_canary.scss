@@ -9,5 +9,10 @@
 @import '../../global/styles/project-settings';
 @import 'carbon-components/scss/components/code-snippet/code-snippet';
 @import 'carbon-components/scss/components/copy-button/copy-button';
+@import 'carbon-components/scss/components/tooltip/tooltip';
 
 $block-class: #{$pkg-prefix}-canary;
+
+.canary--svg {
+  width: 128px;
+}

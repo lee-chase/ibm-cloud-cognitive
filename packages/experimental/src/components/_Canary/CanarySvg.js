@@ -1,8 +1,9 @@
 import React from 'react';
+import { string } from 'prop-types';
 
-export const CanarySvg = (
-  <svg width="202px" height="431px" viewBox="0 0 202 431" version="1.1">
-    <title>Page 1</title>
+export const CanarySvg = ({ title }) => (
+  <svg viewBox="0 0 202 431" version="1.1">
+    <title>{title}</title>
     <defs>
       <radialGradient
         cx="50%"
@@ -76,3 +77,7 @@ export const CanarySvg = (
     </g>
   </svg>
 );
+
+CanarySvg.propTypes = {
+  title: string,
+};
