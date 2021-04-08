@@ -481,12 +481,12 @@ const TemplatePageHeaderWithCarbonHeader = (args) => {
           [Platform]
         </HeaderName>
       </Header>
+      <PageHeader
+        className="example-class-name"
+        {...includeTheseArgs(args)}
+        pageHeaderOffset={48} // 48px is the size of the global header. A more elegant way of passing this could be found.
+      />
       <Content className="page-header-stories__content-container">
-        <PageHeader
-          className="example-class-name"
-          {...includeTheseArgs(args)}
-          pageHeaderOffset={48} // 48px is the size of the global header. A more elegant way of passing this could be found.
-        />
         <div className="page-header-stories__inner-content">
           {dummyPageContent}
         </div>
