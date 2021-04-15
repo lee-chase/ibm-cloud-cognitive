@@ -13,5 +13,6 @@ import { name } from '../package.json';
 addons.setConfig({
   theme: create({
     brandTitle: name,
+    brandUrl: 'https://github.com/carbon-design-system/ibm-cloud-cognitive',
   }),
 });
