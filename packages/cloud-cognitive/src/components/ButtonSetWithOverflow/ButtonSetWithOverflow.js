@@ -1,5 +1,5 @@
 //
-// Copyright IBM Corp. 2020, 2020
+// Copyright IBM Corp. 2020, 2021
 //
 // This source code is licensed under the Apache-2.0 license found in the
 // LICENSE file in the root directory of this source tree.
@@ -159,26 +159,29 @@ export const ButtonSetWithOverflow = ({
 
 ButtonSetWithOverflow.propTypes = {
   /**
-   * Button shape things for us to render - see Carbon button kind, label, onClick.
+   * Button shape things for us to render. Each button is specified as an
+   * object with an optional field 'label' to supply the button label.
+   * Additional fields in the object will be passed to the Button component,
+   * and these can include 'kind', 'onClick', 'className', and any other Button
+   * props (but NB not a ref). Any other fields in the object will be passed
+   * through to the button element as HTML attributes.
    */
-  buttons: PropTypes.oneOfType([
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        kind: PropTypes.oneOf([
-          'primary',
-          'secondary',
-          'danger',
-          'ghost',
-          'danger--primary',
-          'danger--ghost',
-          'danger--tertiary',
-          'tertiary',
-        ]),
-        label: PropTypes.node,
-        onClick: PropTypes.func,
-      })
-    ),
-  ]),
+  buttons: PropTypes.arrayOf(
+    PropTypes.shape({
+      kind: PropTypes.oneOf([
+        'primary',
+        'secondary',
+        'danger',
+        'ghost',
+        'danger--primary',
+        'danger--ghost',
+        'danger--tertiary',
+        'tertiary',
+      ]),
+      label: PropTypes.node,
+      onClick: PropTypes.func,
+    })
+  ),
   /**
    * children of the button set
    */
