@@ -39,7 +39,7 @@ import {
   utilCheckUpdateVerticalSpace,
   utilGetTitleShape,
   utilCalcSpacingBelowTitle,
-  utilSetCustomCSSProps,
+  // utilSetCustomCSSProps,
 } from './PageHeaderUtils';
 
 export let PageHeader = React.forwardRef(
@@ -93,12 +93,6 @@ export let PageHeader = React.forwardRef(
         setMetrics
       );
     };
-    // const setComponentCssCustomProps = useCallback(
-    //   (kvPairs) => {
-    //     return utilSetCustomCSSProps(headerRef, kvPairs);
-    //   },
-    //   [headerRef]
-    // );
 
     // state based on props only
     const actionBarItemArray = extractShapesArray(actionBarItems);
@@ -142,6 +136,7 @@ export let PageHeader = React.forwardRef(
       useState(0);
     const [actionBarColumnWidth, setActionBarColumnWidth] = useState(0);
     const [fullyCollapsed, setFullyCollapsed] = useState(false);
+    const [customCSSProps, setCustomCSSPrpos] = useState({});
 
     // handlers
     const handleActionBarWidthChange = ({ minWidth, maxWidth }) => {
@@ -242,10 +237,11 @@ export let PageHeader = React.forwardRef(
         }
       }
 
-      utilSetCustomCSSProps(headerRef, {
+      setCustomCSSPrpos((prevCSSProps) => ({
+        ...prevCSSProps,
         [`--${blockClass}--max-action-bar-width-px`]: newActionBarWidth,
         [`--${blockClass}--button-set-in-breadcrumb-width-px`]: `${newPageActionInBreadcrumbWidth}`,
-      });
+      }));
     }, [
       actionBarColumnWidth,
       actionBarMaxWidth,
@@ -255,7 +251,7 @@ export let PageHeader = React.forwardRef(
       headerRef,
     ]);
 
-    const doUpdateBreadcrumbPosition = (scrollY) => {
+    const doUpdateBreadcrumbPosition = (scrollY, prevScrollY) => {
       const breadcrumbPosition = {
         position: 'sticky',
         top: pageHeaderOffset,
@@ -268,21 +264,28 @@ export let PageHeader = React.forwardRef(
           metrics.navigationRowHeight -
           metrics.breadcrumbRowHeight;
 
+        console.log({ prevScrollY, scrollY });
         if (relativeTop < scrollY) {
+          // if (prevScrollY < scrollY) {
           breadcrumbPosition.top = relativeTop;
           breadcrumbPosition.position = 'relative';
+          // } else {
+          //   breadcrumbPosition.top = relativeTop - scrollY;
+          // }
         }
       }
 
-      utilSetCustomCSSProps(headerRef, {
+      setCustomCSSPrpos((prevCSSProps) => ({
+        ...prevCSSProps,
         [`--${blockClass}--breadcrumb-top`]: `${breadcrumbPosition.top}px`,
         [`--${blockClass}--breadcrumb-position`]: breadcrumbPosition.position,
-      });
+      }));
     };
 
     useEffect(() => {
       // Updates custom CSS props used to manage scroll behaviour
-      utilSetCustomCSSProps(headerRef, {
+      setCustomCSSPrpos((prevCSSProps) => ({
+        ...prevCSSProps,
         [`--${blockClass}--height-px`]: `${metrics.headerHeight}px`,
         [`--${blockClass}--width-px`]: `${metrics.headerWidth}px`,
         [`--${blockClass}--header-top`]: `${
@@ -306,7 +309,7 @@ export let PageHeader = React.forwardRef(
           )
         )}`,
         [`--${blockClass}--breadcrumb-row-width-px`]: `${metrics.breadcrumbRowWidth}px`,
-      });
+      }));
     }, [
       headerRef,
       preventBreadcrumbScroll,
@@ -327,8 +330,8 @@ export let PageHeader = React.forwardRef(
 
     useWindowScroll(
       // on scroll or various layout changes check updates if needed
-      ({ current }) => {
-        doUpdateBreadcrumbPosition(current.scrollY);
+      ({ current, previous }) => {
+        doUpdateBreadcrumbPosition(current.scrollY, previous.scrollY);
 
         const fullyCollapsed =
           current.scrollY + metrics.headerTopValue + pageHeaderOffset >= 0;
@@ -393,9 +396,10 @@ export let PageHeader = React.forwardRef(
         }
       }
 
-      utilSetCustomCSSProps(headerRef, {
+      setCustomCSSPrpos((prevCSSProps) => ({
+        ...prevCSSProps,
         [`--${blockClass}--background-opacity`]: result,
-      });
+      }));
       setBackgroundOpacity(result);
       setHasCollapseButton(collapseHeaderToggleWanted && result > 0);
     }, [
@@ -449,7 +453,8 @@ export let PageHeader = React.forwardRef(
               [`${blockClass}--show-background`]: backgroundOpacity > 0,
             },
           ])}
-          ref={headerRef}>
+          ref={headerRef}
+          style={customCSSProps}>
           <Grid>
             {hasBreadcrumbRow ? (
               <Row
