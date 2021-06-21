@@ -57,16 +57,17 @@ export const prepareProps = (...values) => {
   }, {});
 };
 
-// A simple wrapper for a prop-types checker that issues a warning message if
-// the value being validated is not null/undefined.
-const deprecatePropInner =
-  (message, validator, info) =>
-  (...args) => {
+// A simple wrapper for a prop-types checker that calls pConsoleFunction if
+// the value being validated is not null/undefined. See definition of pConsole for
+// message types e.g. log, warn, error.
+const deprecatePropInner = (pConsoleFunction, message, validator, info) => {
+  return (...args) => {
     // args = [props, propName, componentName, location, propFullName, ...]
     args[0][args[1]] &&
-      pconsole.warn(message(args[3], args[4] || args[1], args[2], info));
+      pConsoleFunction(message(args[3], args[4] || args[1], args[2], info));
     return validator(...args);
   };
+};
 
 /**
  * A prop-types type checker that marks a particular usage of a prop as
@@ -83,6 +84,7 @@ const deprecatePropInner =
  */
 export const deprecatePropUsage = deprecatePropInner.bind(
   undefined,
+  pconsole.warn,
   (location, propName, componentName, info) =>
     `The usage of the ${location} \`${propName}\` of \`${componentName}\` has been changed and support for the old usage will soon be removed. ${info}`
 );
@@ -99,6 +101,24 @@ export const deprecatePropUsage = deprecatePropInner.bind(
  */
 export const deprecateProp = deprecatePropInner.bind(
   undefined,
+  pconsole.warn,
+  (location, propName, componentName, info) =>
+    `The ${location} \`${propName}\` of \`${componentName}\` has been deprecated and will soon be removed. ${info}`
+);
+
+/**
+ * A prop-types type checker that marks a prop as deprecated.
+ * @param {} validator The prop-types validator for the prop as it should be
+ * used if it weren't deprecated. If this validator produces type checking
+ * errors they will be reported as usual.
+ * @param {*} additionalInfo One or more sentences to be appended to the
+ * deprecation message to explain why the prop is deprecated and/or what should
+ * be used instead.
+ * @returns Any type checking error reported by the validator, or null.
+ */
+export const deprecatedProp = deprecatePropInner.bind(
+  undefined,
+  pconsole.error,
   (location, propName, componentName, info) =>
     `The ${location} \`${propName}\` of \`${componentName}\` has been deprecated and will soon be removed. ${info}`
 );

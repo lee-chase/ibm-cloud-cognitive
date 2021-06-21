@@ -16,7 +16,10 @@ import { Tag } from 'carbon-components-react';
 import ReactResizeDetector from 'react-resize-detector';
 
 import { pkg } from '../../settings';
-import { prepareProps } from '../../global/js/utils/props-helper';
+import {
+  deprecatedProp,
+  prepareProps,
+} from '../../global/js/utils/props-helper';
 const componentName = 'TagSet';
 const blockClass = `${pkg.prefix}--tag-set`;
 
@@ -269,6 +272,16 @@ TagSet.propTypes = {
    * title for the show all modal. **Note: Required if more than 10 tags**
    */
   allTagsModalTile: string_required_if_more_than_10_tags,
+  /**
+   * children: **deprecated** use `tags`
+   */
+  children: deprecatedProp(
+    PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.element),
+      PropTypes.element,
+    ]),
+    'See documentation on the `tags` prop.'
+  ),
   /**
    * className
    */
