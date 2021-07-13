@@ -218,6 +218,4 @@ ButtonSetWithOverflow.propTypes = {
   rightAlign: PropTypes.bool,
 };
 
-ButtonSetWithOverflow.defaultProps = {};
-
 ButtonSetWithOverflow.displayName = componentName;
