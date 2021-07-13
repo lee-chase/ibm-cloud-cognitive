@@ -799,9 +799,19 @@ PageHeader.propTypes = {
     PropTypes.arrayOf(
       PropTypes.shape({
         ...Button.propTypes,
-        kind: Button.propTypes.kind,
-        label: PropTypes.node.isRequired,
-        onClick: Button.propTypes.onClick,
+        key: PropTypes.string.isRequired,
+        kind: PropTypes.oneOf([
+          'primary',
+          'secondary',
+          'danger',
+          'ghost',
+          'danger--primary',
+          'danger--ghost',
+          'danger--tertiary',
+          'tertiary',
+        ]),
+        label: PropTypes.node,
+        onClick: PropTypes.func,
       })
     ),
     deprecatePropUsage(

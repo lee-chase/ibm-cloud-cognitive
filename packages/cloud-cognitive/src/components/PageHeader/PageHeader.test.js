@@ -54,11 +54,13 @@ const breadcrumbItems = (
 const classNames = ['client-class-1', 'client-class-2'];
 const pageActions = [
   {
+    key: '1',
     kind: 'secondary',
     label: 'Secondary button',
     onClick: () => {},
   },
   {
+    key: '2',
     kind: 'primary',
     label: 'Primary button',
     onClick: () => {},
